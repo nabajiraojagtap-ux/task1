@@ -1,0 +1,88 @@
+# Import Libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Create Sample Dataset (You can replace with pd.read_csv("your_file.csv"))
+# Create Sample Dataset
+np.random.seed(42)
+df = pd.DataFrame({
+    "Age": np.random.randint(18, 60, 300),
+    "Gender": np.random.choice(["Male", "Female"], 300),
+    "Annual_Income": np.random.randint(20000, 120000, 300),
+    "Spending_Score": np.random.randint(1, 100, 300),
+    "Purchased": np.random.choice([0, 1], 300)
+    "Gender": np.random.choice(["Male", "Female"], 200),
+    "Purchased": np.random.choice([0, 1], 200)
+})
+
+# -----------------------
+# 1. Basic Information
+# -----------------------
+print("First 5 Rows:")
+print(df.head())
+
+print("\nDataset Info:")
+print(df.info())
+
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+# -----------------------
+# 2. Data Cleaning
+# -----------------------
+df.drop_duplicates(inplace=True)
+df.fillna(df.median(numeric_only=True), inplace=True)
+
+# -----------------------
+# 3. Descriptive Statistics
+# -----------------------
+print("\nSummary Statistics:")
+print(df.describe())
+
+# -----------------------
+# 4. Data Visualization
+# -----------------------
+
+# Distribution of Age
+plt.figure()
+plt.hist(df["Age"], bins=15)
+plt.title("Age Distribution")
+plt.xlabel("Age")
+plt.ylabel("Frequency")
+plt.show()
+# Calculate Purchase Count by Gender
+purchase_by_gender = df.groupby("Gender")["Purchased"].sum()
+
+# Gender Distribution
+# Create Bar Graph
+plt.figure()
+df["Gender"].value_counts().plot(kind="bar")
+plt.title("Gender Distribution")
+purchase_by_gender.plot(kind='bar')
+plt.title("Total Purchases by Gender")
+plt.xlabel("Gender")
+plt.ylabel("Count")
+plt.show()
+
+# Income vs Spending Score
+plt.figure()
+plt.scatter(df["Annual_Income"], df["Spending_Score"])
+plt.title("Income vs Spending Score")
+plt.xlabel("Annual Income")
+plt.ylabel("Spending Score")
+plt.ylabel("Number of Purchases")
+plt.show()
+
+# Correlation Heatmap
+plt.figure()
+sns.heatmap(df.corr(numeric_only=True), annot=True)
+plt.title("Correlation Matrix")
+plt.show()
+
+# -----------------------
+# 5. Insights
+# -----------------------
+print("\nPurchase Rate:")
+print(df["Purchased"].value_counts(normalize=True))
